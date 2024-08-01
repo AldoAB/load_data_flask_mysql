@@ -1,0 +1,7 @@
+# Versiones específicas de bibliotecas
+mysql-connector-python==8.1.0
+Flask==3.0.3
+pandas==2.2.2
+Werkzeug==3.0.3
+python-dotenv==0.21.1
+

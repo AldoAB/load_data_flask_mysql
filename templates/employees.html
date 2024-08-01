@@ -4,15 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employees</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_jobs.css') }}">
 </head>
 <body>
-    <h1>> Employees</h1>
-    <form method="POST" action="", enctype="multipart/form-data">
-        <p><input type="file" name="file"></p>
-        <p><input type="submit" value="Carga archivos"></p>
-    </form>
-    <ul>
-        <li><a href="{{ url_for('index') }}">Cargar otro tipo de archivo</a></li>
-    </ul>
+    <header>
+        <h1>Employees</h1>
+    </header>
+    <main>
+        <section class="upload-form">
+            <form method="POST" action="" enctype="multipart/form-data">
+                <input type="file" name="file" id="file-upload">
+                <button type="submit">Cargar archivo</button>
+            </form>
+            <!-- Mostrar mensajes flash aquí -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </section>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">&lt;&lt; Volver al Inicio</a></li>
+            </ul>
+        </nav>
+    </main>
 </body>
 </html>

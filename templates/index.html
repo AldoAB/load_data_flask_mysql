@@ -1,16 +1,70 @@
-<!-- welcome.html -->
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Bienvenido</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de ficheros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_index.css') }}">
 </head>
 <body>
-    <h1>Carga de data historica</h1>
-    <p>Seleccione una opcion de fichero csv a cargar</p>
-    <ul>
-        <li><a href="{{ url_for('job_page') }}">Jobs</a></li>
-        <li><a href="{{ url_for('employees_page') }}">Employees</a></li>
-        <li><a href="{{ url_for('departments_page') }}">Departments</a></li>
-    </ul>
+    <header>
+        <h1>Carga de data histórica</h1>
+        <p>Seleccione una opción de fichero CSV a cargar</p>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Opciones de carga</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="{{ url_for('job_page') }}">Jobs</a></td>
+                </tr>
+                <tr>
+                    <td><a href="{{ url_for('employees_page') }}">Hired_Employees</a></td>
+                </tr>
+                <tr>
+                    <td><a href="{{ url_for('departments_page') }}">Departments</a></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Sección para mostrar el conteo de registros -->
+        <section class="table-counts">
+            <h2>Conteo de Registros</h2>
+            <ul>
+                <li>Jobs: {{ job_count }}</li>
+                <li>Hired_Employees: {{ employees_count }}</li>
+                <li>Departments: {{ departments_count }}</li>
+            </ul>
+        </section>
+
+
+        <!-- Menú desplegable para seleccionar la tabla y botón para truncar -->
+        <section class="truncate-form">
+            <form method="POST" action="{{ url_for('truncate_table') }}">
+                <h2>Seleccione una tabla para truncar</h2>
+                <select name="table" id="table-select" required>
+                    <option value="jobs">Jobs</option>
+                    <option value="hired_employees">Hired_Employees</option>
+                    <option value="departments">Departments</option>
+                </select>
+                <button type="submit">Truncate Tabla</button>
+            </form>
+        </section>
+
+        <!-- Mostrar mensajes flash aquí -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </main>
 </body>
 </html>
