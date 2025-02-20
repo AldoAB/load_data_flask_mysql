@@ -13,16 +13,21 @@ app.config["UPLOAD_FOLDER"] = DATASETS
 ALLOWED_EXTENSIONS = ["txt", "csv"]
 app.secret_key = '12345'  # esto es necesario para poder usar flash
 
+# vaidaciones iniciales antes de poder insertar data en las tablas
+# def allowed_file(filename):
+#     """Revisar si el archivo tiene una extension valida para ser procesado por el sistema"""
+#     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 def allowed_file(filename):
-    """Revisar si el archivo tiene una extension valida para ser procesado por el sistema"""
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    partes = filename.split('.')
+    return len(partes) > 1 and partes[-1].lower() in ALLOWED_EXTENSIONS
 
 def validate_columns(dataframe, expected_columns):
     """Validar si el número de columnas en el dataframe coincide con el número esperado"""
     return len(dataframe.columns) == len(expected_columns)
 
-# Página de bienvenida
+
+# Página de bienvenida (index)
 @app.route("/")
 def index():
     mycursor, mydb = mysql_connection()
@@ -126,6 +131,7 @@ def insert_data_jobs(filePath):
         print("HA OCURRIDO UN ERROR")
         print(e)
         return False
+
 
 
 
@@ -279,7 +285,7 @@ def insert_data_employees(filePath):
 
 
 def insert_data_departments(filePath):
-    """Inserts data from a CSV file into the departments table in batches."""
+    """Inserta datos de un archivo CSV en la tabla de departamentos por lotes."""
     batch_size = 1000
     try:
         mycursor, mydb = mysql_connection()
@@ -298,7 +304,7 @@ def insert_data_departments(filePath):
             values = [(row[0] if pd.notna(row[0]) else None,
                        row[1] if pd.notna(row[1]) else None) 
                       for _, row in batch.iterrows()]
-            
+
             sql = "INSERT INTO departments(id, department) VALUES (%s, %s)"
             mycursor.executemany(sql, values)
             mydb.commit()
@@ -311,4 +317,4 @@ def insert_data_departments(filePath):
 
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run(port=5000, debug=True)
