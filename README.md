@@ -31,3 +31,6 @@ Archivos de prueba a insertar
 
 # inicio del proyecto
 Prueba local: python3 app.py
+
+# funcione validacion de extensiones
+allowed_file(filename): para una mejor comprension del tipo de archivos a leer

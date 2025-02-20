@@ -32,6 +32,7 @@ order by d.department, j.job
 
 
 -- pregunta 2
+
 select 
     d.id identificacion,
     d.department departamento,
@@ -54,3 +55,19 @@ having
 order by contratado desc;
 
 
+-- segunda forma:
+WITH employees_2021 AS (
+    SELECT department_id, COUNT(*) AS total_hired
+    FROM hired_employees
+    WHERE YEAR(STR_TO_DATE(datetime, '%Y-%m-%dT%H:%i:%s')) = 2021
+    GROUP BY department_id
+),
+mean_hired AS (
+    SELECT AVG(total_hired) AS avg_hired
+    FROM employees_2021
+)
+SELECT d.id, d.department, e.total_hired
+FROM employees_2021 e
+JOIN departments d ON e.department_id = d.id
+WHERE e.total_hired > (SELECT avg_hired FROM mean_hired)
+ORDER BY e.total_hired DESC;
